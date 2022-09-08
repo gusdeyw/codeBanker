@@ -1,7 +1,7 @@
 <?php
 session_start();
 // if (isset($_POST['propid'])) {
-include "../dbconnect.php";
+include "dbconnect.php";
 session_start();
 // $get1 = $_GET["pageno"];
 // $get2 = $_GET["search"];
@@ -13,15 +13,16 @@ session_start();
 // $get8 = $_GET["maxprice"];
 // $get9 = $_GET["minland"];
 // $get10 = $_GET["maxland"];
-if (isset($_GET['pageno'])) {
-    $pageno = $_GET['pageno'];
-} else {
-    $pageno = 1;
-}
+// $pageno;
 
+
+$pageno = $_GET['pageno'];
+
+// echo json_encode($pageno); 
 
 $no_of_records_per_page = 6;
-$offset = ($pageno - 1) * $no_of_records_per_page;
+$offset = ($pageno - 1);
+$offset = $offset * $no_of_records_per_page;
 
 $sql = "SELECT * FROM property_list WHERE property_live = 'on'";
 $con1 = '';
@@ -158,9 +159,20 @@ if ($con10 != null) {
 
 $sql = $sql . " ORDER BY property_number DESC LIMIT $offset, $no_of_records_per_page";
 
-$query = "SELECT * FROM property_list ORDER BY property_number DESC LIMIT $offset, $no_of_records_per_page";
+// $sql = "SELECT * FROM property_list WHERE property_live = 'on' ORDER BY property_number DESC LIMIT 0, 6";
+// echo json_encode($sql);
 
-$result = mysqli_query($koneksi, $query);
+
+// $query = "SELECT * FROM property_list ORDER BY property_number DESC LIMIT $offset, $no_of_records_per_page";
+
+$result = mysqli_query($koneksi, $sql);
+// if($result){
+//     echo json_encode("Sukses");
+// } else {
+//     echo json_encode("gagal");
+// }
+
+
 $property_id = '';
 $property_tittle = '';
 $property_desc = '';
@@ -201,6 +213,8 @@ $total_lease = '';
 $lease_expire = '';
 $extension = '';
 
+// echo json_encode($result);
+$banyaknya = 0;
 while ($row = mysqli_fetch_array($result)) {
     $property_id = $row['property_id'];
     $property_tittle = mb_strimwidth($row['property_tittle'], 0, 30, "...");
@@ -248,8 +262,7 @@ while ($row = mysqli_fetch_array($result)) {
     $facility = explode(',', $facility);
     $image_link = explode(',', $image_link);
 
-    $image_front = $image_link[0];
-
+    $banyaknya = $banyaknya + 1;
     $return_arr[] = array(
         'property_id' => $property_id,
         'property_tittle' => $property_tittle,
@@ -284,7 +297,8 @@ while ($row = mysqli_fetch_array($result)) {
         'total_lease' => $total_lease,
         'lease_expire' => $lease_expire,
         'extension' => $extension,
-        'image_front' => $image_front,
+        'front_image' => $image_link[0],
+        'banyaknya' => $banyaknya
     );
 }
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -293,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Headers: token, Content-Type');
     header('Access-Control-Max-Age: 1728000');
     header('Content-Length: 0');
-    header('Content-Type: text/plain');
+    // header('Content-Type: text/plain');
     die();
 }
 

@@ -192,21 +192,9 @@
         <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-5 my-10">
             <div class=" flex justify-center mx-auto">
                 <ul class="flex pagination">
-                    <li class="<?php if ($pageno <= 1) {
-                                    echo 'disabled';
-                                } ?>"><a href="<?php if ($pageno <= 1) {
-                                                    echo '#';
-                                                } else {
-                                                    echo "?pageno=" . ($pageno - 1) . "&" . "search=" . $next1 . "&" . "location=" . $next2 . "&" . "ownership=" . $next3 . "&" . "minbed=" . $next4 . "&" . "maxbed=" . $next5 . "&" . "minprice=" . $next6 . "&" . "maxprice=" . $next7 . "&" . "minland=" . $next8 . "&" . "maxland=" . $next9;
-                                                } ?>"><button class="h-10 px-5 text-gray-600 bg-white border border-r-0 border-gray-600 hover:bg-gray-100">Prev</button></a>
+                    <li class=""><a id="linkprev"><button class="h-10 px-5 text-gray-600 bg-white border border-r-0 border-gray-600 hover:bg-gray-100">Prev</button></a>
                     </li>
-                    <li class="<?php if ($pageno >= $total_pages) {
-                                    echo 'disabled';
-                                } ?>"><a href="<?php if ($pageno >= $total_pages) {
-                                                    echo '#';
-                                                } else {
-                                                    echo "?pageno=" . ($pageno + 1) . "&" . "search=" . $next1 . "&" . "location=" . $next2 . "&" . "ownership=" . $next3 . "&" . "minbed=" . $next4 . "&" . "maxbed=" . $next5 . "&" . "minprice=" . $next6 . "&" . "maxprice=" . $next7 . "&" . "minland=" . $next8 . "&" . "maxland=" . $next9;
-                                                } ?>"><button class="h-10 px-5 text-gray-600 bg-white border border-gray-600 hover:bg-gray-100">Next</button></a>
+                    <li class=""><a id="linknext"><button class="h-10 px-5 text-gray-600 bg-white border border-gray-600 hover:bg-gray-100">Next</button></a>
                     </li>
                 </ul>
             </div>
@@ -237,99 +225,192 @@
         </div>
     </div>
 
+    <!-- https://www.bvrproperty.com/home?search=&propertytype=&ownership=&minbed=&maxbed=&minprice=&maxprice=&minland=&maxland= -->
 
     <script>
-            $(document).ready(function() {
-                // setInterval(function() {
-                //     $('#cardnya').load('card.php');
-                // }, 1000)
+        $(document).ready(function() {
+            link = window.location.href;
 
-                <?php
-                if (isset($_GET['pageno'])) {
-                    $pageno = $_GET['pageno'];
+            if (link.indexOf("pageno=") == -1) {
+                if (link.indexOf("?") == -1) {
+                    link = link + "?pageno=1";
                 } else {
-                    $pageno = 1;
+                    link = link + "&pageno=1";
                 }
+            }
 
-                ?>
-                var pageno = <?= $pageno ?>;
-                setInterval(() => {
-                    $.ajax({
-                        type: "get",
-                        url: "ajax.php",
-                        data: {
-                            pageno: pageno,
-                            <?php
-                            if ($_GET['search'] != '') {
-                                echo "search: '" . $_GET['search'] . "',";
-                            }
-                            if ($_GET['propertytype'] != '') {
-                                echo "propertytype: '" . $_GET['propertytype'] . "',";
-                            }
-                            if ($_GET['ownership'] != '') {
-                                echo "ownership: '" . $_GET['ownership'] . "',";
-                            }
-                            if ($_GET['minbed'] != '') {
-                                echo "minbed: " . $_GET['minbed'] . ",";
-                            }
-                            if ($_GET['maxbed'] != '') {
-                                echo "maxbed: " . $_GET['maxbed'] . ",";
-                            }
-                            if ($_GET['minprice'] != '') {
-                                echo "minprice: " . $_GET['minprice'] . ",";
-                            }
-                            if ($_GET['maxprice'] != '') {
-                                echo "maxprice: " . $_GET['maxprice'] . ",";
-                            }
-                            if ($_GET['minland'] != '') {
-                                echo "minland: " . $_GET['minland'] . ",";
-                            }
-                            if ($_GET['maxland'] != '') {
-                                echo "maxland: " . $_GET['maxland'] . ",";
-                            }
-                            ?>
-                        },
-                        dataType: "JSON",
-                        success: function(data) {
-                            $("#cardnya").html('');
-                            $.each(data, function(index, val) {
-                                $("#cardnya").append('<div class="bg-white filter drop-shadow-lg border-2 hover:border-bvr20 col-span-1"><a href="#" class="">' +
-                                    '<div class="p-3">' +
-                                    '<p class="font-semibold">' + data[index].property_tittle + '</p>' +
-                                    '<p class="text-red-600">' + data[index].property_id + '</p>' +
-                                    '</div>' +
-                                    '<img class="object-cover h-56 w-full" loading="lazy" src="' + data[index].front_image + '">' +
-                                    '<div class="ml-auto -mt-48 w-max">' +
-                                    '</div>' +
-                                    '<div class="-mt-3"></div>' +
-                                    '<div class="px-4 py-3 grid grid-cols-2 gap-3 mt-48">' +
-                                    '<div class="flex">' +
-                                    '<div class="w-8">' +
-                                    '<i class="fas fa-map-marked-alt object-contain w-full h-full pr-2"></i>' +
-                                    '</div>' +
-                                    '<p class="text-sm h-full my-auto">' + data[index].property_city + '</p>' +
-                                    '</div>' +
-                                    '<div class="flex">' +
-                                    '<i class="pl-1.5 pt-1 fas fa-expand-arrows-alt w-8 pr-2"></i>' +
-                                    '<p class="text-sm">' + data[index].land_size + ' sqm</p>' +
-                                    '</div>' +
-                                    '<div class="flex">' +
-                                    '<i class="fas fa-home pr-2 w-8"></i>' +
-                                    '<p class="text-sm">' + data[index].property_status + '</p>' +
-                                    '</div>' +
-                                    '<div class="flex">' +
-                                    '<i class="fas fa-bed pr-2 w-8"></i>' +
-                                    '<p class="text-sm">' + data[index].bedroom + ' Bedroom</p>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '<div class="flex justify-end">' +
-                                    '<p class="matauang pt-4 text-right font-bold">IDR</p>' +
-                                    '<p id="property" class="currencyprop p-4 text-right font-bold">' + data[index].property_price + '</p>' +
-                                    '</div>' +
-                                    '</a></div>');
-                            });
+            function changePageNo(link, number) {
+                function arrayContains(needle, arrhaystack) {
+                    return (arrhaystack.indexOf(needle) > -1);
+                }
+                var link_length = link.length;
+                var Mark = link.indexOf("pageno");
+                var get_param = link.slice(Mark, link_length);
+                var pageno_splited = get_param.split("=");
+                pageno_splited[1] = number;
+                var changed_pageno = pageno_splited.join("=");
+                var original_link = link.slice(0, Mark);
+                var results = original_link + changed_pageno;
+                return (results);
+            }
+
+            <?php
+            if (isset($_GET['pageno'])) {
+                $pageno = $_GET['pageno'];
+            } else {
+                $pageno = 1;
+            }
+            ?>
+
+            <?php
+            if (isset($_GET['location'])) {
+                $loc = $_GET['location'];
+                $locations = '';
+                if ($loc != null) {
+                    $numItems = count($loc);
+                    $i = 0;
+                    foreach ($loc as $city) {
+                        if (++$i === $numItems) {
+                            $locations = $locations . "location%5B%5D=" . $city;
+                        } else {
+                            $locations = $locations . "location%5B%5D=" . $city . "&";
                         }
-                    });
-                }, 1000);
+                    }
+                }
+            }
+            ?>
+
+            var pageno = <?= $pageno ?>;
+            var pageno_next = pageno + 1;
+            var pageno_prev = pageno - 1;
+
+            if (pageno_prev == 0) {
+                $("#linkprev").attr("href", "#");
+            } else {
+                $("#linknext").attr("href", changePageNo(link, pageno_prev));
+            }
+
+
+            $("#linknext").attr("href", changePageNo(link, pageno_next));
+            var banyaknyaData = 0;
+            $.ajax({
+                type: "get",
+                url: "ajax.php?<?= $locations ?>",
+                data: {
+                    <?php
+                    if ($_GET['search'] != '') {
+                        echo "search: '" . $_GET['search'] . "',";
+                    }
+                    if ($_GET['propertytype'] != '') {
+                        echo "propertytype: '" . $_GET['propertytype'] . "',";
+                    }
+                    if ($_GET['ownership'] != '') {
+                        echo "ownership: '" . $_GET['ownership'] . "',";
+                    }
+                    if ($_GET['minbed'] != '') {
+                        echo "minbed: " . $_GET['minbed'] . ",";
+                    }
+                    if ($_GET['maxbed'] != '') {
+                        echo "maxbed: " . $_GET['maxbed'] . ",";
+                    }
+                    if ($_GET['minprice'] != '') {
+                        echo "minprice: " . $_GET['minprice'] . ",";
+                    }
+                    if ($_GET['maxprice'] != '') {
+                        echo "maxprice: " . $_GET['maxprice'] . ",";
+                    }
+                    if ($_GET['minland'] != '') {
+                        echo "minland: " . $_GET['minland'] . ",";
+                    }
+                    if ($_GET['maxland'] != '') {
+                        echo "maxland: " . $_GET['maxland'] . ",";
+                    }
+                    ?>
+                    pageno: pageno,
+                },
+                dataType: "JSON",
+                success: function(data) {
+                  banyaknyaData = data.length;
+                }
             });
-        </script>
+
+            setInterval(() => {
+                $.ajax({
+                    type: "get",
+                    url: "ajax.php?<?= $locations ?>",
+                    data: {
+                        <?php
+                        if ($_GET['search'] != '') {
+                            echo "search: '" . $_GET['search'] . "',";
+                        }
+                        if ($_GET['propertytype'] != '') {
+                            echo "propertytype: '" . $_GET['propertytype'] . "',";
+                        }
+                        if ($_GET['ownership'] != '') {
+                            echo "ownership: '" . $_GET['ownership'] . "',";
+                        }
+                        if ($_GET['minbed'] != '') {
+                            echo "minbed: " . $_GET['minbed'] . ",";
+                        }
+                        if ($_GET['maxbed'] != '') {
+                            echo "maxbed: " . $_GET['maxbed'] . ",";
+                        }
+                        if ($_GET['minprice'] != '') {
+                            echo "minprice: " . $_GET['minprice'] . ",";
+                        }
+                        if ($_GET['maxprice'] != '') {
+                            echo "maxprice: " . $_GET['maxprice'] . ",";
+                        }
+                        if ($_GET['minland'] != '') {
+                            echo "minland: " . $_GET['minland'] . ",";
+                        }
+                        if ($_GET['maxland'] != '') {
+                            echo "maxland: " . $_GET['maxland'] . ",";
+                        }
+                        ?>
+                        pageno: pageno,
+                    },
+                    dataType: "JSON",
+                    success: function(data) {
+                        $("#cardnya").html('');
+                        $.each(data, function(index, val) {
+                            $("#cardnya").append('<div class="bg-white filter drop-shadow-lg border-2 hover:border-bvr20 col-span-1"><a href="#" class="">' +
+                                '<div class="p-3">' +
+                                '<p class="font-semibold">' + data[index].property_tittle + '</p>' +
+                                '<p class="text-red-600">' + data[index].property_id + '</p>' +
+                                '</div>' +
+                                '<img class="object-cover h-56 w-full" loading="lazy" src="' + data[index].front_image + '">' +
+                                '<div class="ml-auto -mt-48 w-max">' +
+                                '</div>' +
+                                '<div class="-mt-3"></div>' +
+                                '<div class="px-4 py-3 grid grid-cols-2 gap-3 mt-48">' +
+                                '<div class="flex">' +
+                                '<div class="w-8">' +
+                                '<i class="fas fa-map-marked-alt object-contain w-full h-full pr-2"></i>' +
+                                '</div>' +
+                                '<p class="text-sm h-full my-auto">' + data[index].property_city + '</p>' +
+                                '</div>' +
+                                '<div class="flex">' +
+                                '<i class="pl-1.5 pt-1 fas fa-expand-arrows-alt w-8 pr-2"></i>' +
+                                '<p class="text-sm">' + data[index].land_size + ' sqm</p>' +
+                                '</div>' +
+                                '<div class="flex">' +
+                                '<i class="fas fa-home pr-2 w-8"></i>' +
+                                '<p class="text-sm">' + data[index].property_status + '</p>' +
+                                '</div>' +
+                                '<div class="flex">' +
+                                '<i class="fas fa-bed pr-2 w-8"></i>' +
+                                '<p class="text-sm">' + data[index].bedroom + ' Bedroom</p>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="flex justify-end">' +
+                                '<p class="matauang pt-4 text-right font-bold">IDR</p>' +
+                                '<p id="property" class="currencyprop p-4 text-right font-bold">' + data[index].property_price + '</p>' +
+                                '</div>' +
+                                '</a></div>');
+                        });
+                    }
+                });
+            }, 1000);
+        });
+    </script>
