@@ -191,7 +191,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-5 my-10">
             <div class=" flex justify-center mx-auto">
-                <ul class="flex pagination">
+                <ul class="flex pagination" id="pag">
                     <li class=""><a id="linkprev"><button class="h-10 px-5 text-gray-600 bg-white border border-r-0 border-gray-600 hover:bg-gray-100">Prev</button></a>
                     </li>
                     <li class=""><a id="linknext"><button class="h-10 px-5 text-gray-600 bg-white border border-gray-600 hover:bg-gray-100">Next</button></a>
@@ -279,19 +279,8 @@
                 }
             }
             ?>
-
             var pageno = <?= $pageno ?>;
-            var pageno_next = pageno + 1;
-            var pageno_prev = pageno - 1;
 
-            if (pageno_prev == 0) {
-                $("#linkprev").attr("href", "#");
-            } else {
-                $("#linknext").attr("href", changePageNo(link, pageno_prev));
-            }
-
-
-            $("#linknext").attr("href", changePageNo(link, pageno_next));
             var banyaknyaData = 0;
             $.ajax({
                 type: "get",
@@ -331,9 +320,21 @@
                 dataType: "JSON",
                 success: function(data) {
                   banyaknyaData = data.length;
+
                 }
             });
 
+            var pageno_next = pageno + 1;
+            var pageno_prev = pageno - 1;
+
+            if (pageno_prev == 0) {
+                $("#linkprev").attr("href", "#");
+            } else {
+                $("#linknext").attr("href", changePageNo(link, pageno_prev));
+            }
+
+
+            $("#linknext").attr("href", changePageNo(link, pageno_next));
             setInterval(() => {
                 $.ajax({
                     type: "get",
