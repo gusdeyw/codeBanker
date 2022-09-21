@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p class="text-black text-sm text-center sm:text-left">
+        <span>Developed by</span>
+        <span class="inline-flex " style="vertical-align:middle;">
+            <a href="https://bvrdigital.com/" class="mx-2" target="blank">
+                <img src="../images/digital-potongan.png" width="100px" class="self-center">
+            </a>
+        </span>
+        <span>©
+            <script>document.write(new Date().getFullYear())</script>2022 All right reserved
+        </span>
+    </p>
+</body>
+
+</html>
+
+<script defer>
+    jQuery(document).ready(function () {
+        jQuery("div#footer-wrapper div#footer-top div.center").html("");
+        jQuery("div#footer-wrapper div#footer-top div.center").append('<p class="text-black text-sm text-center sm:text-left">' +
+            '<span>Developed by</span>' +
+            ' <span class="inline-flex " style="vertical-align:middle;">' +
+            '<a href="https://bvrdigital.com/" class="mx-2" target="blank">' +
+            '<img src="https://bvrdigital.com/wp-content/uploads/2022/06/digitalwhite.png" width="100px" class="self-center">' +
+            '</a>' +
+            '</span>' +
+            '<span>©2022 All right reserved</span>' +
+            '</p >');
+    });
+</script>
+
+<script defer>
+    jQuery(document).ready(function () {
+        jQuery("div.elementor-element-26f4094 div.elementor-widget-container div.elementor-text-editor").html("");
+        jQuery("div.elementor-element-26f4094 div.elementor-widget-container div.elementor-text-editor").append('<p class="text-black text-sm text-center sm:text-left">' +
+            '<span>Developed by</span>' +
+            ' <span class="inline-flex " style="vertical-align:middle;">' +
+            '<a href="https://bvrdigital.com/" class="mx-2" target="blank">' +
+            '<img src="https://bvrdigital.com/wp-content/uploads/2022/06/digitalwhite.png" width="100px" class="self-center">' +
+            '</a>' +
+            '</span>' +
+            '<span>©2022 All right reserved</span>' +
+            '</p >');
+    });
+</script>
+
+
+    <script>
+        jQuery(document).ready(function() {
+		jQuery('#backnavbar').addClass('backtrans');
+		jQuery('#backnavbar').removeClass('backputih');
+		jQuery('li.menu-item a').addClass('font-white');	
+		
+		jQuery('ul.sub-menu').addClass('submenu-hitam');
+		jQuery('ul.sub-menu').removeClass('submenu-putih');
+		jQuery('ul#mobile_menu1').addClass('submenu-hitam');
+		jQuery('ul#mobile_menu1').removeClass('submenu-putih');
+		
+		
+        jQuery('a[title="test"]').addClass("disabled");
+		 
+		
+		jQuery(window).scroll(function() {
+            // checks if window is scrolled more than 500px, adds/removes solid class
+            if (jQuery(this).scrollTop() > 200) {
+                jQuery('#backnavbar').addClass('backputih');
+				jQuery('#backnavbar').removeClass('backtrans');
+				jQuery('li.menu-item a').removeClass('font-white');
+				jQuery('li.menu-item a').addClass('font-black');
+				jQuery('ul.sub-menu').removeClass('submenu-hitam');
+				jQuery('ul.sub-menu').addClass('submenu-putih');
+				
+				jQuery('ul#mobile_menu1').removeClass('submenu-hitam');
+				jQuery('ul#mobile_menu1').addClass('submenu-putih');
+            } else {
+                jQuery('#backnavbar').addClass('backtrans');
+				jQuery('#backnavbar').removeClass('backputih');
+				jQuery('li.menu-item a').removeClass('font-black');
+				jQuery('li.menu-item a').addClass('font-white');
+				jQuery('ul.sub-menu').addClass('submenu-hitam');
+				jQuery('ul.sub-menu').removeClass('submenu-putih');
+				
+				jQuery('ul#mobile_menu1').addClass('submenu-hitam');
+				jQuery('ul#mobile_menu1').removeClass('submenu-putih');
+            }
+        });
+    });
+    </script>
