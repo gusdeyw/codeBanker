@@ -194,6 +194,14 @@
                 <ul class="flex pagination" id="pag">
                     <li class=""><a id="linkprev"><button class="h-10 px-5 text-gray-600 bg-white border border-r-0 border-gray-600 hover:bg-gray-100">Prev</button></a>
                     </li>
+                    <li>
+                        <?php
+                        $slider = "SELECT * FROM property_list WHERE property_live = 'on'";
+                        $banyak_data = mysqli_query($koneksi, $slider);
+                        $banyak_datanya =  mysqli_num_rows($banyak_data);
+
+                        ?>
+                    </li>
                     <li class=""><a id="linknext"><button class="h-10 px-5 text-gray-600 bg-white border border-gray-600 hover:bg-gray-100">Next</button></a>
                     </li>
                 </ul>
@@ -319,7 +327,7 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                  banyaknyaData = data.length;
+                    banyaknyaData = data.length;
 
                 }
             });
