@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <button id="check" class="btn btn-primary form-control">Check</button>
+
+</body>
+
+</html>
+
+
+<script>
+    // $(document).ready(function () {
+    //     var form = new FormData();
+    //     var settings = {
+    //         "url": "https://api.apilayer.com/exchangerates_data/convert?to=USD&from=IDR&amount=100000",
+    //         "method": "GET",
+    //         "timeout": 0,
+    //         "headers": {
+    //             "apikey": "87rKhrpaIrR1329FlME9Wc64JzwVp28w"
+    //         },
+    //         "processData": false,
+    //         "mimeType": "multipart/form-data",
+    //         "contentType": false,
+    //         "data": form
+    //     };
+
+    //     // $("#check").on("click", function () {
+    //     $.ajax(settings).done(function (response) {
+    //         response = jQuery.parseJSON(response);
+    //         console.log(response.info.rate);
+    //         // $.each(response, function (index, element) {
+    //         //     console.log(element);
+    //         // });
+    //     });
+    //     // });
+    // });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $(".js-select2-multi").select2({
+            closeOnSelect: false
+        });
+
+        checkvirtual = $("#dlinkslider").val();
+        if (checkvirtual != '') {
+            $("#dlinkslidershow").text("Virtual Tour");
+        }
+        checkyoutube = $("#youtubeval").val();
+        if (checkyoutube == '') {
+            $("#youtube").addClass("hidden");
+        }
+
+        $("#USD").on('click', function () {
+
+            currency = 'USD';
+            rubah(currency);
+        });
+
+        $("#IDR").on('click', function () {
+
+            currency = 'IDR';
+            rubah(currency);
+        });
+
+        $("#EUR").on('click', function () {
+
+            currency = 'EUR';
+            rubah(currency);
+        });
+
+        $("#GBP").on('click', function () {
+
+            currency = 'GBP';
+            rubah(currency);
+        });
+
+        $("#JPY").on('click', function () {
+
+            currency = 'JPY';
+            rubah(currency);
+        });
+
+        $("#CHF").on('click', function () {
+
+            currency = 'CHF';
+            rubah(currency);
+        });
+
+        var idr = [];
+
+        // API Engine Choose 
+        // 1. currencyconv
+        // 2. apilayer
+
+        // Changes 'appConvert Variable to pick one engine'
+        var appConvert = "currencyconv";
+
+        function rubah(curr) {
+            var test = [];
+            if (appConvert == "apilayer") {
+                var form = new FormData();
+                var settings = {
+                    "url": "https://api.apilayer.com/exchangerates_data/convert?to="+currency+"&from=IDR&amount=1",
+                    "method": "GET",
+                    "timeout": 0,
+                    "headers": {
+                        "apikey": "87rKhrpaIrR1329FlME9Wc64JzwVp28w"
+                    },
+                    "processData": false,
+                    "mimeType": "multipart/form-data",
+                    "contentType": false,
+                    "data": form
+                };
+
+                // $("#check").on("click", function () {
+                $.ajax(settings).done(function (response) {
+                    response = jQuery.parseJSON(response);
+                    rate = response.info.rate;
+                    if (idr.length == 0) {
+                        $(".currencyprop").each(function () {
+                            arr = $(this).text().split(",").join("");
+                            arr = parseInt(arr);
+                            idr.push(arr);
+                            arrayres = arr * rate;
+                            test.push(arrayres);
+                        });
+                    } else {
+                        $.each(idr, function (a, uang) {
+                            arrayres = uang * rate;
+                            test.push(arrayres);
+                        });
+                    }
+                    $.each(test, function (i, price) {
+                        price = price.toFixed(2);
+                        price = addCommas(price);
+                        $("#property" + i).text(price);
+                    });
+                    $(".matauang").text(curr);
+                    $("#currencynav").text(curr);
+                });
+                // });
+            } else if (appConvert == "currencyconv") {
+                $.ajax({
+                    url: 'https://free.currconv.com/api/v7/convert?q=IDR_' + curr + '&compact=ultra&apiKey=1504311b1bcc43b8f45c',
+                    method: 'GET',
+                    dataType: 'jsonp',
+                    success: function (json) {
+                        // access the conversion result in json.result
+                        if (curr == "IDR") {
+                            rate = json.IDR_IDR;
+                        }
+                        if (curr == "USD") {
+                            rate = json.IDR_USD;
+                        }
+                        if (curr == "EUR") {
+                            rate = json.IDR_EUR;
+                        }
+                        if (curr == "GBP") {
+                            rate = json.IDR_GBP;
+                        }
+                        if (curr == "JPY") {
+                            rate = json.IDR_JPY;
+                        }
+                        if (curr == "CHF") {
+                            rate = json.IDR_CHF;
+                        }
+                        if (idr.length == 0) {
+                            $(".currencyprop").each(function () {
+                                arr = $(this).text().split(",").join("");
+                                arr = parseInt(arr);
+                                idr.push(arr);
+                                arrayres = arr * rate;
+                                test.push(arrayres);
+                            });
+                        } else {
+                            $.each(idr, function (a, uang) {
+                                arrayres = uang * rate;
+                                test.push(arrayres);
+                            });
+                        }
+                        $.each(test, function (i, price) {
+                            price = price.toFixed(2);
+                            price = addCommas(price);
+                            $("#property" + i).text(price);
+                        });
+                        $(".matauang").text(curr);
+                        $("#currencynav").text(curr);
+                    }
+                });
+            }
+        }
+
+        function addCommas(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+    });
+</script>
