@@ -104,6 +104,7 @@
         // API Engine Choose 
         // 1. currencyconv
         // 2. apilayer
+        // 3. fixer
 
         // Changes 'appConvert Variable to pick one engine'
         var appConvert = "currencyconv";
@@ -113,7 +114,7 @@
             if (appConvert == "apilayer") {
                 var form = new FormData();
                 var settings = {
-                    "url": "https://api.apilayer.com/exchangerates_data/convert?to="+currency+"&from=IDR&amount=1",
+                    "url": "https://api.apilayer.com/exchangerates_data/convert?to=" + currency + "&from=IDR&amount=1",
                     "method": "GET",
                     "timeout": 0,
                     "headers": {
@@ -199,6 +200,47 @@
                         $(".matauang").text(curr);
                         $("#currencynav").text(curr);
                     }
+                });
+            } else if (appConvert == "fixer") {
+                var form = new FormData();
+                var settings = {
+                    "url": "https://api.apilayer.com/fixer/convert?to=" + currency + "&from=IDR&amount=1",
+                    "method": "GET",
+                    "timeout": 0,
+                    "headers": {
+                        "apikey": "87rKhrpaIrR1329FlME9Wc64JzwVp28w"
+                    },
+                    "processData": false,
+                    "mimeType": "multipart/form-data",
+                    "contentType": false,
+                    "data": form
+                };
+
+                // $("#check").on("click", function () {
+                $.ajax(settings).done(function (response) {
+                    response = jQuery.parseJSON(response);
+                    rate = response.info.rate;
+                    if (idr.length == 0) {
+                        $(".currencyprop").each(function () {
+                            arr = $(this).text().split(",").join("");
+                            arr = parseInt(arr);
+                            idr.push(arr);
+                            arrayres = arr * rate;
+                            test.push(arrayres);
+                        });
+                    } else {
+                        $.each(idr, function (a, uang) {
+                            arrayres = uang * rate;
+                            test.push(arrayres);
+                        });
+                    }
+                    $.each(test, function (i, price) {
+                        price = price.toFixed(2);
+                        price = addCommas(price);
+                        $("#property" + i).text(price);
+                    });
+                    $(".matauang").text(curr);
+                    $("#currencynav").text(curr);
                 });
             }
         }
