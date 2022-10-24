@@ -1,6 +1,7 @@
 {
     "require": {
         "midtrans/midtrans-php": "^2.5",
-        "xendit/xendit-php": "^2.18"
+        "xendit/xendit-php": "^2.18",
+        "fakerphp/faker": "^1.20"
     }
 }
